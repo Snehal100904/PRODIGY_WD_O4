@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="cityInput" placeholder="navimumbai">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weatherData"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+.container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#weatherData {
+    margin-top: 20px;
+    font-size: 20px;
+}
+function getWeather() {
+    const city = document.getElementById('cityInput').value;
+    const apiKey = '21e960811d2b3ec3a3e1f98e9282cf72'; // Replace with your OpenWeatherMap API key
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const weatherData = `
+                <h2>Weather in ${data.name}</h2>
+                <p>Temperature: ${data.main.temp}°C</p>
+                <p>Weather: ${data.weather[0].description}</p>
+            `;
+            document.getElementById('weatherData').innerHTML = weatherData;
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+            document.getElementById('weatherData').innerHTML = '<p>Error fetching weather data. Please try again.</p>';
+        });
+}
